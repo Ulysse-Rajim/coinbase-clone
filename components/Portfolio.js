@@ -1,40 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { coins } from "../static/coins";
 import Coin from "../components/Coins";
+import BalanceChart from "./BalanceChart";
 
-const Portfolio = () => {
+const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
+  // const balance = [];
+  // console.log(thirdwebTokens);
+  // async function getBalance() {
+  //   balance = await sdk.getBalance(walletAddress, sanityTokens);
+  // }
+
+  console.log(thirdwebTokens);
+
   return (
     <Wrapper>
-      <PortfolioTable>
-        <TableItem>
-          <Title>Your Assets</Title>
-        </TableItem>
-        <Divider />
-        <Table>
+      <Content>
+        <Chart>
+          <div>
+            <Balance>
+              <BalanceTitle>Portfolio Balance</BalanceTitle>
+              <BalanceValue>
+                {"$"}
+                46000
+              </BalanceValue>
+            </Balance>
+          </div>
+        </Chart>
+        <BalanceChart />
+        <PortfolioTable>
           <TableItem>
-            <TableRow>
-              <div>Name</div>
-              <div>Balance</div>
-              <div>Price</div>
-              <div>Allocation</div>
-              <BsThreeDotsVertical />
-            </TableRow>
+            <Title>Your Assets</Title>
           </TableItem>
-          <Divider>
-            <div>
-              {coins.map((coin) => (
-                <div>
-                  <Coin coin={coin} />
-                  {/* <h2>{coin.name}</h2> */}
-                  <Divider />
-                </div>
-              ))}
-            </div>
-          </Divider>
-        </Table>
-      </PortfolioTable>
+          <Divider />
+          <Table>
+            <TableItem>
+              <TableRow>
+                <div>Name</div>
+                <div>Balance</div>
+                <div>Price</div>
+                <div>Allocation</div>
+                <BsThreeDotsVertical />
+              </TableRow>
+            </TableItem>
+            <Divider>
+              <div>
+                {coins.map((coin) => (
+                  <div>
+                    <Coin coin={coin} />
+                    {/* <h2>{coin.name}</h2> */}
+                    <Divider />
+                  </div>
+                ))}
+              </div>
+            </Divider>
+          </Table>
+        </PortfolioTable>
+      </Content>
     </Wrapper>
   );
 };
