@@ -6,13 +6,10 @@ import Coin from "../components/Coins";
 import BalanceChart from "./BalanceChart";
 
 const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
-  // const balance = [];
   // console.log(thirdwebTokens);
-  // async function getBalance() {
-  //   balance = await sdk.getBalance(walletAddress, sanityTokens);
-  // }
 
-  console.log(thirdwebTokens);
+  // prettier-ignore
+  // thirdwebTokens[0].balanceOf(walletAddress).then(balance => console.log(balance))
 
   return (
     <Wrapper>
