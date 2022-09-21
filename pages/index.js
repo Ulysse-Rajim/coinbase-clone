@@ -1,19 +1,45 @@
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useWeb3 } from "@3rdweb/hooks";
 import Dashboard from "./Dashboard";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
+import debounce from "lodash/debounce";
 
 export default function Home() {
-  const { address, connectWallet } = useWeb3();
+  // const { address, connectWallet } = useWeb3();
+  const address = useAddress();
+
+  const [sanityTokens, setSanityTokens] = useState([]);
+
+  const getTokens = async () => {
+    try {
+      const coins = await fetch(
+        "https://vuuqbx7n.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D'coins'%5D%7B%0A%20%20name%2C%0A%20%20usdPrice%2C%0A%20%20contractAddress%2C%0A%20%20symbol%2C%0A%20%20logo%2C%0A%7D"
+      );
+      const sanityTokens = (await coins.json()).result;
+      setSanityTokens(sanityTokens);
+      console.log("Sanity tokens: ", sanityTokens);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    // const listener = debounce(() => {
+    getTokens();
+    // }, 1000);
+    //debounce(listener, 1000);
+  }, []);
 
   return (
     <Wrapper>
       {address ? (
-        <Dashboard address={address} />
+        <Dashboard address={address} sanityTokens={sanityTokens} />
       ) : (
         <WalletConnect>
-          <Button onClick={() => connectWallet("injected")}>
+          {/* <Button onClick={() => connectWallet("injected")}>
             Connect Wallet
-          </Button>
+          </Button> */}
+          <ConnectWallet accentColor="#f213a4" colorMode="light" />
           <Details>
             You need Chrome to be <br /> able to run this app
           </Details>

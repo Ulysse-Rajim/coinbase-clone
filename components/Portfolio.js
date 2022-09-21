@@ -4,12 +4,17 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { coins } from "../static/coins";
 import Coin from "../components/Coins";
 import BalanceChart from "./BalanceChart";
+import { useToken, useTokenBalance } from "@thirdweb-dev/react";
 
 const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
-  // console.log(thirdwebTokens);
+  // const {
+  //   data: balance,
+  //   isLoading,
+  //   error,
+  // } = useTokenBalance(thirdwebTokens[0]);
 
-  // prettier-ignore
-  // thirdwebTokens[0].balanceOf(walletAddress).then(balance => console.log(balance))
+  console.log(thirdwebTokens[0]);
+  // console.log(balance, isLoading, error);
 
   return (
     <Wrapper>

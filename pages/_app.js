@@ -1,4 +1,4 @@
-import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
+import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
 const supportedChainIds = [4];
 const connectors = {
@@ -7,12 +7,9 @@ const connectors = {
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThirdwebWeb3Provider
-      supportedChainIds={supportedChainIds}
-      connectors={connectors}
-    >
+    <ThirdwebProvider desiredChainId={ChainId.Mainnet}>
       <Component {...pageProps} />
-    </ThirdwebWeb3Provider>
+    </ThirdwebProvider>
   );
 }
 
