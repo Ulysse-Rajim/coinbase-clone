@@ -1,51 +1,52 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import styled from "styled-components";
-import Portfolio from "../components/Portfolio";
 import Sidebar from "../components/Sidebar";
 import Main from "../components/Main";
-import { useToken, ConnectWallet, useTokenBalance } from "@thirdweb-dev/react";
+import { ThirdwebSDK } from "@3rdweb/sdk";
 import { ethers } from "ethers";
 
-import debounce from "lodash/debounce";
-
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const rpcUrl = "https://rinkeby.infura.io/v3/";
-
-// const wallet = new ethers.Wallet(
-//   PRIVATE_KEY,
-//   ethers.getDefaultProvider(rpcUrl)
-// );
-
-const Dashboard = ({ address, sanityTokens }) => {
+const Dashboard = ({ address }) => {
+  const [sanityTokens, setSanityTokens] = useState([]);
   const [thirdwebTokens, setThirdwebTokens] = useState([]);
-  const [value, setValue] = useState(0);
-  const tokens = [];
-
-  useToken(
-    sanityTokens.map(async (token) => {
-      tokens.push(token.contractAddress);
-    })
-  );
-
-  // const getTokens = throttle(async () => {
-  //   try {
-  //     const coins = await fetch(
-  //       "https://vuuqbx7n.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D'coins'%5D%7B%0A%20%20name%2C%0A%20%20usdPrice%2C%0A%20%20contractAddress%2C%0A%20%20symbol%2C%0A%20%20logo%2C%0A%7D"
-  //     );
-  //     const sanityTokens = (await coins.json()).result;
-  //     setSanityTokens(sanityTokens);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, 1000);
 
   useEffect(() => {
-    const listener = debounce(() => {
-      setThirdwebTokens(tokens);
-    }, 1000);
-    debounce(listener, 1000);
+    const getCoins = async () => {
+      try {
+        const coins = await fetch(
+          "https://vuuqbx7n.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D'coins'%5D%7B%0A%20%20name%2C%0A%20%20usdPrice%2C%0A%20%20contractAddress%2C%0A%20%20symbol%2C%0A%20%20logo%2C%0A%7D"
+        );
+        const tempSanityTokens = await coins.json();
+
+        setSanityTokens(tempSanityTokens.result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getCoins();
+    // return;
   }, []);
+
+  useEffect(() => {
+    if (sanityTokens) {
+      const sdk = new ThirdwebSDK(
+        new ethers.Wallet(
+          process.env.PRIVATE_KEY,
+          ethers.getDefaultProvider(
+            "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
+          )
+        )
+      );
+
+      sanityTokens.map((tokenItem) => {
+        const currentToken = sdk.getTokenModule(tokenItem.contractAddress);
+
+        setThirdwebTokens((prevState) => [...prevState, currentToken]);
+      });
+      console.log("Thirdweb Tokens: ", thirdwebTokens);
+    }
+  }, [sanityTokens]);
 
   return (
     <Wrapper>

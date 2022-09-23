@@ -1,7 +1,7 @@
-import React from "react";
 import Portfolio from "./Portfolio";
 import styled from "styled-components";
 import Promos from "./Promos";
+import React from "react";
 
 const Main = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
   return (

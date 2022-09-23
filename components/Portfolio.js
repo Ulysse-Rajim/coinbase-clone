@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { coins } from "../static/coins";
 import Coin from "../components/Coins";
 import BalanceChart from "./BalanceChart";
-import { useToken, useTokenBalance } from "@thirdweb-dev/react";
 
 const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
-  // const {
-  //   data: balance,
-  //   isLoading,
-  //   error,
-  // } = useTokenBalance(thirdwebTokens[0]);
-
-  console.log(thirdwebTokens[0]);
-  // console.log(balance, isLoading, error);
+  console.log("Portfolio / ThirdWebTokens: ", thirdwebTokens);
 
   return (
     <Wrapper>
