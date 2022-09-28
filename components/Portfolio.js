@@ -21,7 +21,7 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
       );
 
       const balance = await getBalance(currentTwToken[0]);
-      console.log("Portfolio / thirdWebTokens: ", balance);
+      // console.log("Portfolio / thirdWebTokens: ", balance);
     });
 
     // console.log("Portfolio / sanityTokens: ", sanityTokens);
@@ -64,7 +64,7 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
                   <div key={nanoid()}>
                     <Coin coin={coin} />
                     {/* <h2>{coin.name}</h2> */}
-                    {console.log("coin:", coin)}
+                    {/* {console.log("coin:", coin)} */}
                     <Divider />
                   </div>
                 ))}
