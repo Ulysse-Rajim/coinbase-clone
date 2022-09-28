@@ -14,13 +14,14 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
   };
 
   useEffect(() => {
-    sanityTokens.map(async (token) => {
+    sanityTokens.map(async (token, key) => {
       const currentTwToken = thirdwebTokens.filter(
         (twToken) => twToken.address === token.contractAddress
       );
 
       const balance = await getBalance(currentTwToken[0]);
       console.log("Portfolio / thirdWebTokens: ", balance);
+      console.log("key: ", key);
     });
 
     // console.log("Portfolio / sanityTokens: ", sanityTokens);
