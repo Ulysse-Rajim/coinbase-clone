@@ -44,7 +44,7 @@ const Dashboard = ({ address }) => {
 
         setThirdwebTokens((prevState) => [...prevState, currentToken]);
       });
-      console.log("Thirdweb Tokens: ", thirdwebTokens);
+      // console.log("Thirdweb Tokens: ", thirdwebTokens);
     }
   }, [sanityTokens]);
 

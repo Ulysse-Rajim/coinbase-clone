@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { coins } from "../static/coins";
@@ -6,7 +6,26 @@ import Coin from "../components/Coins";
 import BalanceChart from "./BalanceChart";
 
 const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
-  console.log("Portfolio / ThirdWebTokens: ", thirdwebTokens);
+  const getBalance = async (activeTwToken) => {
+    const balance =
+      activeTwToken && (await activeTwToken.balanceOf(walletAddress));
+
+    return parseInt(activeTwToken && balance.displayValue);
+  };
+
+  useEffect(() => {
+    sanityTokens.map(async (token) => {
+      const currentTwToken = thirdwebTokens.filter(
+        (twToken) => twToken.address === token.contractAddress
+      );
+
+      const balance = await getBalance(currentTwToken[0]);
+      console.log("Portfolio / thirdWebTokens: ", balance);
+    });
+
+    // console.log("Portfolio / sanityTokens: ", sanityTokens);
+    // console.log("Portfolio / walletAddress: ", walletAddress);
+  }, [thirdwebTokens, sanityTokens]);
 
   return (
     <Wrapper>
