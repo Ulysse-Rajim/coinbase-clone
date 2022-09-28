@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Dashboard from "./Dashboard";
+import Dashboard from "../components/Dashboard";
 import { useWeb3 } from "@3rdweb/hooks";
 
 export default function Home() {

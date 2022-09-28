@@ -4,16 +4,17 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { coins } from "../static/coins";
 import Coin from "../components/Coins";
 import BalanceChart from "./BalanceChart";
+import { nanoid } from "nanoid";
 
 const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
-  const getBalance = async (activeTwToken) => {
-    const balance =
-      activeTwToken && (await activeTwToken.balanceOf(walletAddress));
-
-    return parseInt(activeTwToken && balance.displayValue);
-  };
-
   useEffect(() => {
+    const getBalance = async (activeTwToken) => {
+      const balance =
+        activeTwToken && (await activeTwToken.balanceOf(walletAddress));
+
+      return parseInt(activeTwToken && balance.displayValue);
+    };
+
     sanityTokens.map(async (token) => {
       const currentTwToken = thirdwebTokens.filter(
         (twToken) => twToken.address === token.contractAddress
@@ -25,7 +26,7 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
 
     // console.log("Portfolio / sanityTokens: ", sanityTokens);
     // console.log("Portfolio / walletAddress: ", walletAddress);
-  }, [thirdwebTokens, sanityTokens]);
+  }, [thirdwebTokens, sanityTokens, walletAddress]);
 
   return (
     <Wrapper>
@@ -60,9 +61,10 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
             <Divider>
               <div>
                 {coins.map((coin) => (
-                  <div>
-                    <Coin coin={coin} key={coin.address} />
+                  <div key={nanoid()}>
+                    <Coin coin={coin} />
                     {/* <h2>{coin.name}</h2> */}
+                    {console.log("coin:", coin)}
                     <Divider />
                   </div>
                 ))}
