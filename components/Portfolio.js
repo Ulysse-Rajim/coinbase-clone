@@ -14,14 +14,13 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
   };
 
   useEffect(() => {
-    sanityTokens.map(async (token, key) => {
+    sanityTokens.map(async (token) => {
       const currentTwToken = thirdwebTokens.filter(
         (twToken) => twToken.address === token.contractAddress
       );
 
       const balance = await getBalance(currentTwToken[0]);
       console.log("Portfolio / thirdWebTokens: ", balance);
-      console.log("key: ", key);
     });
 
     // console.log("Portfolio / sanityTokens: ", sanityTokens);
@@ -62,7 +61,7 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
               <div>
                 {coins.map((coin) => (
                   <div>
-                    <Coin coin={coin} />
+                    <Coin coin={coin} key={coin.address} />
                     {/* <h2>{coin.name}</h2> */}
                     <Divider />
                   </div>
