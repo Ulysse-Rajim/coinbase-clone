@@ -31,7 +31,7 @@ export default function Home({ balances, sanityTokens }) {
 }
 
 export async function getServerSideProps() {
-  // const address = "0x748965F1e7883D3E3aF80a4c9C8bE05B3D72f5Bc";
+  const address = "0x748965F1e7883D3E3aF80a4c9C8bE05B3D72f5Bc";
   const sdk = new ThirdwebSDK(
     new ethers.Wallet(
       process.env.PRIVATE_KEY,
