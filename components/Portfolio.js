@@ -6,27 +6,26 @@ import Coin from "../components/Coins";
 import BalanceChart from "./BalanceChart";
 import { nanoid } from "nanoid";
 
-const Portfolio = ({ walletAddress, sanityTokens, thirdwebTokens }) => {
+const Portfolio = ({ walletAddress, sanityTokens, balances }) => {
   useEffect(() => {
-    const getBalance = async (activeTwToken) => {
-      const balance =
-        activeTwToken && (await activeTwToken.balanceOf(walletAddress));
-
-      return parseInt(activeTwToken && balance.displayValue);
-    };
-
-    sanityTokens.map(async (token) => {
-      const currentTwToken = thirdwebTokens.filter(
-        (twToken) => twToken.address === token.contractAddress
-      );
-
-      const balance = await getBalance(currentTwToken[0]);
-      // console.log("Portfolio / thirdWebTokens: ", balance);
-    });
-
-    // console.log("Portfolio / sanityTokens: ", sanityTokens);
-    // console.log("Portfolio / walletAddress: ", walletAddress);
-  }, [thirdwebTokens, sanityTokens, walletAddress]);
+    // const getBalance = async (activeTwToken) => {
+    //   const balance =
+    //     activeTwToken && (await activeTwToken.balanceOf(walletAddress));
+    //   return parseInt(activeTwToken && balance.displayValue);
+    // };
+    // console.log("sanity: ", sanityTokens);
+    // sanityTokens.map(async (token) => {
+    //   if (!thirdwebTokens) return;
+    //   const currentTwToken = await thirdwebTokens.filter(
+    //     (twToken) => twToken.address === token.contractAddress
+    //   );
+    //   const balance = await getBalance(currentTwToken[0]);
+    //   console.log("twTokens balance: ", balance);
+    // });
+    console.log("Portfolio / balances: ", balances);
+    console.log("Portfolio / sanityTokens: ", sanityTokens);
+    console.log("Portfolio / walletAddress: ", walletAddress);
+  }, [balances, sanityTokens, walletAddress]);
 
   return (
     <Wrapper>
