@@ -22,9 +22,9 @@ const Portfolio = ({ walletAddress, sanityTokens, balances }) => {
     //   const balance = await getBalance(currentTwToken[0]);
     //   console.log("twTokens balance: ", balance);
     // });
-    console.log("Portfolio / balances: ", balances);
-    console.log("Portfolio / sanityTokens: ", sanityTokens);
-    console.log("Portfolio / walletAddress: ", walletAddress);
+    // console.log("Portfolio / balances: ", balances);
+    // console.log("Portfolio / sanityTokens: ", sanityTokens);
+    // console.log("Portfolio / walletAddress: ", walletAddress);
   }, [balances, sanityTokens, walletAddress]);
 
   return (
