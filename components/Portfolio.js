@@ -1,31 +1,83 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { coins } from "../static/coins";
 import Coin from "../components/Coins";
 import BalanceChart from "./BalanceChart";
 import { nanoid } from "nanoid";
+import { useWeb3 } from "@3rdweb/hooks";
+import { ThirdwebSDK } from "@3rdweb/sdk";
 
-const Portfolio = ({ walletAddress, sanityTokens, balances }) => {
+const Portfolio = ({ address }) => {
+  const { provider } = useWeb3();
+  const [thirdWebTokens, setThirdwebTokens] = useState([]);
+  const [sanityTokens, setSanityTokens] = useState([]);
+  const [balances, setBalances] = useState([]);
+
+  const sdk = useMemo(() => {
+    if (provider) return new ThirdwebSDK(provider.getSigner());
+    return undefined;
+  }, [provider]);
+
+  const tempTokens = useMemo(() => {
+    if (sdk) {
+      if (sanityTokens) {
+        setThirdwebTokens([]);
+        sanityTokens.map((tokenItem) => {
+          const currentToken = sdk.getTokenModule(tokenItem.contractAddress);
+          setThirdwebTokens((prevState) => [...prevState, currentToken]);
+        });
+      }
+    }
+    return undefined;
+  }, [sdk]);
+
   useEffect(() => {
-    // const getBalance = async (activeTwToken) => {
-    //   const balance =
-    //     activeTwToken && (await activeTwToken.balanceOf(walletAddress));
-    //   return parseInt(activeTwToken && balance.displayValue);
-    // };
-    // console.log("sanity: ", sanityTokens);
-    // sanityTokens.map(async (token) => {
-    //   if (!thirdwebTokens) return;
-    //   const currentTwToken = await thirdwebTokens.filter(
-    //     (twToken) => twToken.address === token.contractAddress
-    //   );
-    //   const balance = await getBalance(currentTwToken[0]);
-    //   console.log("twTokens balance: ", balance);
-    // });
-    // console.log("Portfolio / balances: ", balances);
-    // console.log("Portfolio / sanityTokens: ", sanityTokens);
-    // console.log("Portfolio / walletAddress: ", walletAddress);
-  }, [balances, sanityTokens, walletAddress]);
+    const getCoins = async () => {
+      try {
+        const coins = await fetch(
+          "https://vuuqbx7n.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D'coins'%5D%7B%0A%20%20name%2C%0A%20%20usdPrice%2C%0A%20%20contractAddress%2C%0A%20%20symbol%2C%0A%20%20logo%2C%0A%7D"
+        );
+        const tempSanityTokens = await coins.json();
+
+        setSanityTokens(tempSanityTokens.result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getCoins();
+  }, [thirdWebTokens]);
+
+  useEffect(() => {
+    const getBalances = async (tokens) => {
+      setBalances([]);
+      const balances =
+        tokens &&
+        (await tokens.map((token) =>
+          token.balanceOf(address).then((result) => {
+            // console.log(result);
+            setBalances((prevState) => [...prevState, result]);
+          })
+        ));
+    };
+
+    getBalances(thirdWebTokens);
+  }, [sanityTokens, thirdWebTokens]);
+
+  const cleanBalances = balances.filter((value, index) => {
+    const _value = JSON.stringify(value);
+    return (
+      index ===
+      balances.findIndex((obj) => {
+        return JSON.stringify(obj) === _value;
+      })
+    );
+  });
+
+  // console.log("sanityTokens :", sanityTokens);
+  // console.log("thirdWebTokens :", thirdWebTokens);
+  // console.log("balances: ", cleanBalances);
 
   return (
     <Wrapper>

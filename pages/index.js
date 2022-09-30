@@ -5,17 +5,13 @@ import { useWeb3 } from "@3rdweb/hooks";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import { ethers } from "ethers";
 
-export default function Home({ balances, sanityTokens }) {
+export default function Home() {
   const { address, connectWallet } = useWeb3();
 
   return (
     <Wrapper>
       {address ? (
-        <Dashboard
-          address={address}
-          sanityTokens={sanityTokens}
-          balances={balances}
-        />
+        <Dashboard address={address} />
       ) : (
         <WalletConnect>
           <Button onClick={() => connectWallet("injected")}>
@@ -30,46 +26,41 @@ export default function Home({ balances, sanityTokens }) {
   );
 }
 
-export async function getServerSideProps() {
-  const address = "0x748965F1e7883D3E3aF80a4c9C8bE05B3D72f5Bc";
-  const sdk = new ThirdwebSDK(
-    new ethers.Wallet(
-      process.env.PRIVATE_KEY,
-      ethers.getDefaultProvider(
-        "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
-      )
-    )
-  );
+// export async function getServerSideProps() {
+//   const sdk = new ThirdwebSDK(
+//     new ethers.Wallet(
+//       process.env.PRIVATE_KEY,
+//       ethers.getDefaultProvider(
+//         "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
+//       )
+//     )
+//   );
 
-  const coins = await fetch(
-    "https://vuuqbx7n.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D'coins'%5D%7B%0A%20%20name%2C%0A%20%20usdPrice%2C%0A%20%20contractAddress%2C%0A%20%20symbol%2C%0A%20%20logo%2C%0A%7D"
-  );
-  const sanityTokens = await coins.json();
+//   const coins = await fetch(
+//     "https://vuuqbx7n.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D'coins'%5D%7B%0A%20%20name%2C%0A%20%20usdPrice%2C%0A%20%20contractAddress%2C%0A%20%20symbol%2C%0A%20%20logo%2C%0A%7D"
+//   );
+//   const sanityTokens = await coins.json();
 
-  const thirdWebTokens = [
-    sdk.getTokenModule(sanityTokens.result[0].contractAddress),
-    sdk.getTokenModule(sanityTokens.result[1].contractAddress),
-  ];
+//   const thirdWebTokens = [
+//     sdk.getTokenModule(sanityTokens.result[0].contractAddress),
+//     sdk.getTokenModule(sanityTokens.result[1].contractAddress),
+//   ];
 
-  console.log(address);
-  console.log(thirdWebTokens[0].address);
+//   const getBalance = async (activeTwToken) => {
+//     const balance = activeTwToken && (await activeTwToken.balanceOf(address));
 
-  const getBalance = async (activeTwToken) => {
-    const balance = activeTwToken && (await activeTwToken.balanceOf(address));
+//     return parseInt(activeTwToken && balance.displayValue);
+//   };
 
-    return parseInt(activeTwToken && balance.displayValue);
-  };
+//   const balances = await getBalance(thirdWebTokens[1]);
 
-  const balances = await getBalance(thirdWebTokens[1]);
-  console.log(JSON.parse(JSON.stringify(balances)));
-
-  return {
-    props: {
-      balances: JSON.parse(JSON.stringify(balances)),
-      sanityTokens: JSON.parse(JSON.stringify(sanityTokens.result)),
-    },
-  };
-}
+//   return {
+//     props: {
+//       balances: JSON.parse(JSON.stringify(balances)),
+//       sanityTokens: JSON.parse(JSON.stringify(sanityTokens.result)),
+//     },
+//   };
+// }
 
 const Wrapper = styled.div`
   display: flex;

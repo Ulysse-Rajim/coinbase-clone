@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Header = ({ walletAddress, connectWallet }) => {
+const Header = ({ address, connectWallet }) => {
   return (
     <Wrapper>
       <Title>Assets</Title>
@@ -9,7 +9,7 @@ const Header = ({ walletAddress, connectWallet }) => {
         <WalletLink>
           <WalletLinkTitle>Wallet Connected</WalletLinkTitle>
           <WalletAddress>
-            {walletAddress.slice(0, 7)}...{walletAddress.slice(35)}
+            {address.slice(0, 7)}...{address.slice(35)}
           </WalletAddress>
         </WalletLink>
         <Button style={{ backgroundColor: "#3773f5", color: "#000" }}>
